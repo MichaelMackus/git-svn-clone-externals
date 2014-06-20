@@ -17,8 +17,10 @@ function call()
 function do_clone()
 {
     test -d .git_externals || return 1
-    module=`echo $remote_url|sed 's,\(.*\)\(/trunk\|/branch.*\|/tag.*\),\1,'`
-    branch=`echo $remote_url|sed 's,\(.*\)\(/trunk\|/branch.*\|/tag.*\),\2,'|sed 's,^/,,'`
+    #module=`echo $remote_url|sed 's,\(.*\)\(/trunk\|/branches.*\|/branch.*\|/tag.*\),\1,'`
+    #branch=`echo $remote_url|sed 's,\(.*\)\(/trunk\|/branches.*\|/branch.*\|/tag.*\),\2,'|sed 's,^/,,'`
+    module=$remote_url
+    branch=$remote_url
     if [[ $branch = $remote_url ]]; then
         branch=""
     fi
@@ -39,7 +41,7 @@ function do_clone()
             if [ "$module" = "$remote_url" ]; then
                 # URL does not contains any trunk, branches or tags part, so we dont need
                 # additional options for git-svn
-                call git svn clone "$revision" "$module" "$local_directory"
+                call git svn clone -r HEAD "$revision" "$module" "$local_directory"
             else
                 call git svn clone "$revision" "$module" -T trunk -b $brch -t $tags "$local_directory"
             fi
