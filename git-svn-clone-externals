@@ -100,6 +100,8 @@ function is_excluded()
 
 git svn show-externals | grep -vE '#|^$' | \
     sed 's/\(-r\)[ ]*\([0-9]\{1,\}\)/\1\2/' | \
+    # Attempt to unmangle externals like: /path/http://URL path2
+    sed 's/^\/\([^ ]\+\)http\([^ ]\+\) \(\w\+\)/\/\1\3 http\2/' | \
     while read svn_externals
 do
 
